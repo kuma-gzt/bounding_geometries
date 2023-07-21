@@ -29,7 +29,7 @@ from qgis.PyQt.QtWidgets import QAction, QMessageBox
 from qgis.core import Qgis, QgsWkbTypes
 from qgis.core import QgsMapLayer
 from qgis.core import QgsVectorLayer, QgsRectangle, QgsProject, QgsFeature
-from qgis.core import QgsGeometry, QgsField, QgsFillSymbol, QgsSingleSymbolRenderer
+from qgis.core import QgsGeometry, QgsFillSymbol, QgsSingleSymbolRenderer
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -37,7 +37,6 @@ from .resources import *
 from .bounding_geometries_dialog import BoundingGeometriesDialog
 
 import os.path
-
 
 class BoundingGeometries:
     """QGIS Plugin Implementation."""
@@ -219,7 +218,7 @@ class BoundingGeometries:
             
             symbol = QgsFillSymbol.createSimple({"color":"0,0,0,0",
                                                  "color_border":"#000000",
-                                                 "width_border":"0.2"})
+                                                 "width_border":"0.6"})
             renderer = QgsSingleSymbolRenderer(symbol)
             mem_lyr.setRenderer(renderer)
             
@@ -229,7 +228,7 @@ class BoundingGeometries:
                 # verify that feat is a polygon or multipolygon                
                 if feat.geometry().type() == QgsWkbTypes.PolygonGeometry:
                     polygon_counter += 1
-                    # verify feat is a valid GEOS polygon
+                    # verify that feat is a valid GEOS polygon
                     if feat.geometry().isGeosValid():                        
                         if self.dlg.chBox_BoundingBox.isChecked():
                             bounding_box = feat.geometry().boundingBox()
