@@ -21,14 +21,21 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QVariant
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QMessageBox
+
+
+from qgis.core import Qgis, QgsWkbTypes
+from qgis.core import QgsMapLayer
+from qgis.core import QgsVectorLayer, QgsRectangle, QgsProject, QgsFeature
+from qgis.core import QgsGeometry, QgsField, QgsFillSymbol, QgsSingleSymbolRenderer
 
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
 from .bounding_geometries_dialog import BoundingGeometriesDialog
+
 import os.path
 
 
@@ -195,6 +202,81 @@ class BoundingGeometries:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
+            self.get_geometries()
+ 
+    def get_geometries(self):
+        """Get the bounding geometries"""        
+        
+        #curr_lyr is the selected layer on the dialog
+        curr_lyr = self.dlg.mMapLayerComboBox.currentLayer()
+        
+        # Verify the selected layer is a vector layer
+        if (curr_lyr.type() == QgsMapLayer.VectorLayer):
+            feat_list = curr_lyr.getFeatures()
+            spatial_ref = curr_lyr.crs()
+            uri = "Polygon?crs={spatial_ref}&field=Geometry:string(255)&index=no".format(spatial_ref=spatial_ref)
+            mem_lyr = QgsVectorLayer(uri, "Bounding Geometries", "memory")
+            
+            symbol = QgsFillSymbol.createSimple({"color":"0,0,0,0",
+                                                 "color_border":"#000000",
+                                                 "width_border":"0.2"})
+            renderer = QgsSingleSymbolRenderer(symbol)
+            mem_lyr.setRenderer(renderer)
+            
+            prov = mem_lyr.dataProvider()
+            polygon_counter = 0
+            for feat in feat_list:
+                # verify that feat is a polygon or multipolygon                
+                if feat.geometry().type() == QgsWkbTypes.PolygonGeometry:
+                    polygon_counter += 1
+                    # verify feat is a valid GEOS polygon
+                    if feat.geometry().isGeosValid():                        
+                        if self.dlg.chBox_BoundingBox.isChecked():
+                            bounding_box = feat.geometry().boundingBox()
+                            f = QgsFeature()
+                            # boundingBox doesn't return a geometry,
+                            # so we need to create one
+                            geom = QgsGeometry().fromRect(bounding_box)
+                            f.setGeometry(geom)
+                            f.setAttributes(["Bounding box"])
+                            prov.addFeature(f)
+                        
+                        if self.dlg.chBox_OrientMinBoundingBox.isChecked():
+                            # orientedMinimumBoundingBox() returns a tuple,
+                            # the first element is the geometry
+                            oriented_min_bounding_box = feat.geometry().orientedMinimumBoundingBox()[0]
+                            f = QgsFeature()
+                            f.setGeometry(oriented_min_bounding_box)
+                            f.setAttributes(["Oriented minimum bounding box"])
+                            prov.addFeature(f)
+                            
+                        if self.dlg.chBox_MinEnclosingCircle.isChecked():
+                            # minimalEnclosingCircle() returns a tuple,
+                            # the first element is the geometry
+                            min_enclosing_circ = feat.geometry().minimalEnclosingCircle()[0]
+                            f = QgsFeature()
+                            f.setGeometry(min_enclosing_circ)
+                            f.setAttributes(["Minimal enclosing circle"])
+                            prov.addFeature(f)
+                            
+                        if self.dlg.chBox_ConvexHull.isChecked():
+                            # convexHull() returns a geometry
+                            convex_hull = feat.geometry().convexHull()
+                            f = QgsFeature()
+                            f.setGeometry(convex_hull)
+                            f.setAttributes(["Convex hull"])
+                            prov.addFeature(f)
+                        
+                        mem_lyr.updateExtents() 
+                        QgsProject.instance().addMapLayer(mem_lyr)
+                    
+                    else:
+                        self.iface.messageBar().pushMessage("The polygon with id #{id} is not GEOS valid".format(id=feat.id()), 
+                                                            level=Qgis.Warning)
+            if polygon_counter == 0:
+                QMessageBox.warning(self.iface.mainWindow(),
+                                    "Bounding Geometries",
+                                    "No polygons were found in the layer {lyr_name}".format(lyr_name=curr_lyr.name()))
+        else:
+            QMessageBox.warning(self.iface.mainWindow(), 
+                                "Bounding Geometries", "the layer {lyr_name} is not of type vector".format(lyr_name=curr_lyr.name()))
