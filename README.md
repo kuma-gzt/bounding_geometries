@@ -41,7 +41,7 @@ The plugin works on multipart polygons:
 
 Unvalid Geometry Polygons
 ------------------
-If a polygon is not a valid one (after the [GEOS](https://libgeos.org/) library), the pluggin will not calculate any geometries. Note that the pluggin won't crash if such event happens, but a warning message will be displayed:
+If a polygon is not geometrically valid (after the [GEOS](https://libgeos.org/) library), the plugin will skip it and continue with the rest of polygons. Note that the plugin won't crash if such event happens, but a warning message will be displayed:
 
 ![invalid_polygon](resources/invalid_polygon.png)
 
