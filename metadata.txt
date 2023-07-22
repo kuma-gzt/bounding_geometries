@@ -5,15 +5,15 @@
 [general]
 name=Bounding Geometries
 qgisMinimumVersion=3.0
-description=Mnimum bouding geometries for polygons
+description=Minimum bouding geometries for polygons
 version=0.1
 author=Leo Guzman
 email=kuma@mailfence.com
 
-about=This plugin will calculate different types of minimum bounding geometries for polygons.
+about=This plugin will calculate four different types of minimum bounding geometries for polygons, namely: bounding box, oriented minimum bounding box, minimal enclosing circle and convex hull.
 
-tracker=http://bugs
-repository=http://repo
+tracker=https://github.com/kuma-gzt/bounding_geometries/issues
+repository=https://github.com/kuma-gzt/bounding_geometries
 # End of mandatory metadata
 
 # Recommended items:
@@ -23,9 +23,9 @@ hasProcessingProvider=no
 # changelog=
 
 # Tags are comma separated with spaces allowed
-tags=python
+tags=bounding box, convex hull, enclosing circle, polygons
 
-homepage=http://homepage
+homepage=https://github.com/kuma-gzt/bounding_geometries
 category=Vector
 icon=icon.png
 # experimental flag
