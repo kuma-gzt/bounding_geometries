@@ -1,4 +1,5 @@
-#Bounding Geometries v0.1
+Bounding Geometries v0.1
+========================
 
 **Bounding Geometries** is a plugin for QGIS that will calculate four types of minimum bounding geometries, namely: bounding box, oriented minimum bounding box, minimal enclosing circle and convex hull.
 
@@ -10,7 +11,7 @@ Usage
 -----
 * Click on ![icon](icon.png) to launch the plugin
 * Select the layer containing the polygons
-* Select the boundary geometries you need/want. A new **in-memory** layer called *Bounding Geometries* will be created holding the geometries
+* Select the boundary geometries you need/want. After clicking the OK button, a new **in-memory** layer called *Bounding Geometries* will be created holding the geometries
 * The plugin will calculate the selected geometries for all the polygons in the layer
 
 ![dialog](resources/dialog.png)
@@ -41,7 +42,7 @@ The plugin works on multipart polygons:
 
 Unvalid Geometry Polygons
 ------------------
-If a polygon is not geometrically valid (after the [GEOS](https://libgeos.org/) library), the plugin will skip it and continue with the rest of polygons. Note that the plugin won't crash if such event happens, but a warning message will be displayed:
+If a polygon is not geometrically valid (after the [GEOS](https://libgeos.org/) library criteria), the plugin will skip it and continue with the rest of polygons. If such an event happens, a warning message will be displayed:
 
 ![invalid_polygon](resources/invalid_polygon.png)
 
