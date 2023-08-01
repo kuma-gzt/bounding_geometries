@@ -5,7 +5,7 @@
 [general]
 name=Bounding Geometries
 qgisMinimumVersion=3.0
-description=Minimum bouding geometries for polygons
+description=Minimum bounding geometries for polygons
 version=0.1
 author=Leo Guzman
 email=kuma@mailfence.com
