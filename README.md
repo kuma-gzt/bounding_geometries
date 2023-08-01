@@ -14,37 +14,37 @@ Usage
 * Select the boundary geometries you need/want. After clicking the OK button, a new **in-memory** layer called *Bounding Geometries* will be created holding the geometries
 * The plugin will calculate the selected geometries for all the polygons in the layer
 
-![dialog](resources/dialog.png)
+![dialog](images/dialog.png)
 
 Bounding Geometries Graphical Description
 --------------------------- 
 **Bounding Box**
 
-![bounding_box](resources/bounding_box.png)
+![bounding_box](images/bounding_box.png)
 
 **Oriented Minimum Bounding Box**
 
-![oriented_minimum_bounding_box](resources/oriented_minimum_bounding_box.png)
+![oriented_minimum_bounding_box](images/oriented_minimum_bounding_box.png)
 
 **Minimal Enclosing Circle**
 
-![minimal_enclosing_circle](resources/minimal_enclosing_circle.png)
+![minimal_enclosing_circle](images/minimal_enclosing_circle.png)
 
 **Convex Hull**
 
-![convex_hull](resources/convex_hull.png)
+![convex_hull](images/convex_hull.png)
 
 Multipart Polygons
 ------------------
 The plugin works on multipart polygons: 
 
-![multipart_polygon](resources/multipart_polygon.png)
+![multipart_polygon](images/multipart_polygon.png)
 
 Unvalid Geometry Polygons
 ------------------
 If a polygon is not geometrically valid (after the [GEOS](https://libgeos.org/) library criteria), the plugin will skip it and continue with the rest of polygons. If such an event happens, a warning message will be displayed:
 
-![invalid_polygon](resources/invalid_polygon.png)
+![invalid_polygon](images/invalid_polygon.png)
 
 Spatial Reference
 -----------------
